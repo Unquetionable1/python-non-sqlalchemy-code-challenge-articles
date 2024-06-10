@@ -6,11 +6,11 @@ class Article:
         self.magazine = magazine
         self._title = str(title)
         Article.all.append(self)
-    #this method is a getter for the title attribute
+ 
     @property
     def title(self):
         return self._title
-    # Setter for the title attribute with validation
+ 
     @title.setter
     def title(self, title):
        if hasattr(self,"title"):AttributeError("Title cannot be changed")
@@ -59,20 +59,19 @@ class Author:
     def name(self, new_names):
         self.new_names = new_names
         return self._name
-    # Method to get all articles written by the author
+    
     def articles(self):
         return [articles for articles in Article.all if articles.author == self]
 
-    # Method to get all unique magazines the author has contributed to
     def magazines(self):
         return list(set([article.magazine for article in self.articles()]))
     
-    # Method to add a new article for the author
+   
     def add_article(self, magazine, title):
         articles = Article(self, magazine, title)
         return articles
    
-    # Method to get all unique  categories of magazines the author has written for
+    
     def topic_areas(self):
         return list(set([article.magazine.category for article in self.articles()])) if self.articles() else None
 
@@ -96,7 +95,7 @@ class Magazine:
     def category(self):
         return self._category
     
-    # Setter for the name attribute with validation
+   
     @name.setter
     def name(self, new_name):
         if isinstance(new_name, str):
@@ -128,39 +127,16 @@ class Magazine:
         return titles if titles else None
    
     def contributing_authors(self):
-     #initialise an empty dictionary
+     
       authors = {}
-      # iterate over articles of teh current magazine
+      
       for article in self.articles():
-          #check if the author is already in the dictionary
+         
           if article.author in authors:
-              #increase the count
+             
               authors[article.author] += 1
           else:
               authors[article.author] = 1
-      #create a list of authors who have written more than 2 articles
+      
       contributing_authors = [author for author, count in authors.items() if count >= 2]
       return contributing_authors if contributing_authors else None
-    
-   
-    @staticmethod
-    def top_publisher():
-       #check if there are any articles
-        if Article.all:
-            #initialise an empty dictionary
-            magazine_article_count = {}
-            
-            # iterate over articles
-            for article in Article.all:
-                #get the magazine of the article 
-                magazine = article.magazine
-                #check if the magazine is already in the dictionary
-                if magazine in magazine_article_count:
-                    #increase the count
-                    magazine_article_count[magazine] += 1
-                else:
-                   magazine_article_count[magazine] = 1
-            
-           # return the magazine with the most articles
-            return max(magazine_article_count, key=magazine_article_count.get)
-        return None
